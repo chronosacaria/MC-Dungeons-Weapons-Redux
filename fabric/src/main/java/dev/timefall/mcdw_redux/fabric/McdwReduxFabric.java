@@ -1,11 +1,11 @@
 package dev.timefall.mcdw_redux.fabric;
 
-import dev.timefall.mcdw_redux.MCDWRedux;
+import dev.timefall.mcdw_redux.McdwRedux;
 import net.fabricmc.api.ModInitializer;
 
-public class MCDWReduxFabric implements ModInitializer {
+public class McdwReduxFabric implements ModInitializer {
     @Override
     public void onInitialize() {
-        MCDWRedux.init();
+        McdwRedux.init();
     }
 }

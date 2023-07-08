@@ -9,6 +9,12 @@ repositories {
         }
     }
     maven { url 'https://jitpack.io' }
+    maven {
+        url "https://maven.jamieswhiteshirt.com/libs-release"
+        content {
+            includeGroup "com.jamieswhiteshirt"
+        }
+    }
 }
 
 dependencies {
@@ -20,8 +26,9 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    modApi("com.blamejared.clumps:Clumps-common-${rootProject.minecraft_version}:${project.clumps_version}")
-    modApi("maven.modrinth:projectile-damage-attribute:${rootProject.projectile_damage_version}+${project.minecraft_version}-fabric")
+    modApi("com.blamejared.clumps:Clumps-common-${rootProject.minecraft_version}:${rootProject.clumps_version}")
+    modApi("maven.modrinth:projectile-damage-attribute:${rootProject.projectile_damage_version}+${rootProject.minecraft_version}-fabric")
+    modApi("com.jamieswhiteshirt:reach-entity-attributes:${rootProject.reach_entity_attributes_version}")
     modApi(implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-common:${rootProject.mixin_extras_version}")))
 }
 
