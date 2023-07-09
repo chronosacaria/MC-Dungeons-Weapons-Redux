@@ -1,29 +1,26 @@
 package dev.timefall.mcdw_redux.items.bases;
 
+import dev.timefall.mcdw_redux.enums.WeaponsID;
 import dev.timefall.mcdw_redux.interfaces.IInnateEnchantment;
-import dev.timefall.mcdw_redux.registries.ItemGroupsRegistry;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.*;
-import net.minecraft.text.Text;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.world.World;
 
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-public class BluntBaseItem extends AxeItem implements IInnateEnchantment {
+/**
+ * Exact copy of AxeBaseItem except it cannot strip, wax, or mine wood. Still an axe so can disable shields.
+ */
+public class BluntBaseItem extends AxeBaseItem implements IInnateEnchantment {
+    WeaponsID weaponsID;
     String[] repairIngredient;
 
-    @SuppressWarnings("UnstableApiUsage")
-    public BluntBaseItem(ToolMaterial material, int attackDamage, float attackSpeed, String[] repairIngredient) {
-        super(material, attackDamage, attackSpeed,
-                new Item.Settings()
-                        .rarity(RarityHelper.fromToolMaterial(material))
-                        .arch$tab(ItemGroupsRegistry.MCDW_REDUX_MELEE));
+    public BluntBaseItem(WeaponsID weaponsID, ToolMaterial material, float attackDamage, float attackSpeed, String[] repairIngredient) {
+        super(weaponsID, material, attackDamage, attackSpeed, repairIngredient);
+        this.weaponsID = weaponsID;
         this.repairIngredient = repairIngredient;
     }
 
@@ -33,13 +30,14 @@ public class BluntBaseItem extends AxeItem implements IInnateEnchantment {
     }
 
     @Override
-    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return CleanlinessHelper.canRepairCheck(repairIngredient, ingredient);
+    public float getMiningSpeedMultiplier(ItemStack stack, BlockState state) {
+        // Doesn't mine anything faster (not really a tool)
+        return 1.0f;
     }
 
     @Override
-    public ItemStack getDefaultStack() {
-        return getInnateEnchantedStack(this);
+    public boolean isSuitableFor(BlockState state) {
+        return false;
     }
 
     @Override
@@ -47,15 +45,4 @@ public class BluntBaseItem extends AxeItem implements IInnateEnchantment {
         return null;
     }
 
-    @Override
-    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        super.appendTooltip(stack, world, tooltip, tooltipContext);
-        int i = 1;
-        String str = stack.getItem().getTranslationKey().toLowerCase(Locale.ROOT).substring(17);
-        String translationKey = String.format("tooltip_info_item.mcdw_redux.%s_", str);
-        while (I18n.hasTranslation(translationKey + i)) {
-            tooltip.add(Text.translatable(translationKey + i).formatted(Formatting.ITALIC));
-            i++;
-        }
-    }
 }

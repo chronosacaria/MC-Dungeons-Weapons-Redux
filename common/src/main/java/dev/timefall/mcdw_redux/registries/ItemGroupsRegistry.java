@@ -4,6 +4,7 @@ import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import dev.timefall.mcdw_redux.McdwRedux;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -14,33 +15,18 @@ public class ItemGroupsRegistry {
     public static final DeferredRegister<ItemGroup> CREATIVE_TABS =
             DeferredRegister.create(McdwRedux.MOD_ID, RegistryKeys.ITEM_GROUP);
 
-    public static final RegistrySupplier<ItemGroup> MCDW_REDUX_MELEE = CREATIVE_TABS.register(
-            "melee",
-            () -> CreativeTabRegistry.create(
-                    Text.translatable("itemGroup.mcdw_redux.melee"),
-                    () -> new ItemStack(ItemsRegistry.HEARTSTEALER.get())
-            )
-    );
-    public static final RegistrySupplier<ItemGroup> MCDW_REDUX_RANGED = CREATIVE_TABS.register(
-            "ranged",
-            () -> CreativeTabRegistry.create(
-                    Text.translatable("itemGroup.mcdw_redux.ranged"),
-                    () -> new ItemStack(ItemsRegistry.LONGBOW.get())
-            )
-    );
-    public static final RegistrySupplier<ItemGroup> MCDW_REDUX_SHIELDS = CREATIVE_TABS.register(
-            "shields",
-            () -> CreativeTabRegistry.create(
-                    Text.translatable("itemGroup.mcdw_redux.shields"),
-                    () -> new ItemStack(ItemsRegistry.ROYAL_GUARD_SHIELD.get())
-            )
-    );
+    public static final RegistrySupplier<ItemGroup> MCDW_REDUX_MELEE = registerItemGroup("melee", ItemsRegistry.HEARTSTEALER.get());
+    public static final RegistrySupplier<ItemGroup> MCDW_REDUX_RANGED = registerItemGroup("ranged", ItemsRegistry.LONGBOW.get());
+    public static final RegistrySupplier<ItemGroup> MCDW_REDUX_SHIELDS = registerItemGroup("shields", ItemsRegistry.ROYAL_GUARD_SHIELD.get());
+    public static final RegistrySupplier<ItemGroup> MCDW_REDUX_ENCHANTMENTS = registerItemGroup("enchantments", Items.ENCHANTED_BOOK);
 
-    public static final RegistrySupplier<ItemGroup> MCDW_REDUX_ENCHANTMENTS = CREATIVE_TABS.register(
-            "enchantments",
-            () -> CreativeTabRegistry.create(
-                    Text.translatable("itemGroup.mcdw_redux.enchantments"),
-                    () -> new ItemStack(Items.ENCHANTED_BOOK)
-            )
-    );
+    private static RegistrySupplier<ItemGroup> registerItemGroup(String id, Item item) {
+        return CREATIVE_TABS.register(
+                id,
+                () -> CreativeTabRegistry.create(
+                        Text.translatable("itemGroup." + McdwRedux.MOD_ID + "." + id),
+                        () -> new ItemStack(item)
+                )
+        );
+    }
 }

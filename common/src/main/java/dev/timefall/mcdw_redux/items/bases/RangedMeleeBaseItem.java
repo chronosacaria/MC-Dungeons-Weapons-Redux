@@ -2,69 +2,46 @@ package dev.timefall.mcdw_redux.items.bases;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
-import dev.architectury.platform.Platform;
-import dev.timefall.mcdw_redux.McdwRedux;
-import dev.timefall.mcdw_redux.configs.CompatibilityFlags;
+import dev.timefall.mcdw_redux.enums.WeaponsID;
+import dev.timefall.mcdw_redux.helpers.BasesHelper;
 import dev.timefall.mcdw_redux.interfaces.IInnateEnchantment;
-import dev.timefall.mcdw_redux.registries.EntityAttributesRegistry;
 import dev.timefall.mcdw_redux.registries.ItemGroupsRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-public class PolearmBaseItem extends SwordItem implements IInnateEnchantment {
+public class RangedMeleeBaseItem extends SwordItem implements IInnateEnchantment {
+    WeaponsID weaponsID;
     private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
     private final ToolMaterial material;
     private final float attackDamage;
+    private final double attackRange;
     String[] repairIngredient;
 
-    @SuppressWarnings("UnstableApiUsage")
-    public PolearmBaseItem(ToolMaterial material, int attackDamage, float attackSpeed, String[] repairIngredient) {
-        super(material, attackDamage, attackSpeed,
-                new Item.Settings()
-                        .rarity(RarityHelper.fromToolMaterial(material))
-                        .arch$tab(ItemGroupsRegistry.MCDW_REDUX_MELEE));
+    public RangedMeleeBaseItem(WeaponsID weaponsID, ToolMaterial material, int attackDamage, float attackSpeed, double attackRange, String[] repairIngredient) {
+        super(material, attackDamage, attackSpeed, BasesHelper.mcdw_redux$createMeleeWeaponSettings(material, ItemGroupsRegistry.MCDW_REDUX_MELEE.get()));
+        this.weaponsID = weaponsID;
         this.material = material;
         this.attackDamage = attackDamage + material.getAttackDamage();
+        this.attackRange = attackRange;
         this.repairIngredient = repairIngredient;
 
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID,
-                "Tool modifier", this.attackDamage, EntityAttributeModifier.Operation.ADDITION));
-        builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID,
-                "Tool modifier", attackSpeed, EntityAttributeModifier.Operation.ADDITION));
-        if (Platform.isFabric() && Platform.isModLoaded("reach-entity-attributes") && CompatibilityFlags.isReachExtensionEnabled) {
-            builder.put(ReachEntityAttributes.REACH, new EntityAttributeModifier("Attack range",
-                    McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfPolearms,
-                    EntityAttributeModifier.Operation.ADDITION));
-            builder.put(ReachEntityAttributes.ATTACK_RANGE, new EntityAttributeModifier("Attack range",
-                    McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfPolearms,
-                    EntityAttributeModifier.Operation.ADDITION));
-        } else if (CompatibilityFlags.isReachExtensionEnabled) {
-            builder.put(EntityAttributesRegistry.ATTACK_RANGE.get(), new EntityAttributeModifier("Attack range",
-                    McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfPolearms,
-                    EntityAttributeModifier.Operation.ADDITION));
-        }
+        BasesHelper.mcdw_redux$putRangeAttributes(builder, attackRange);
         this.attributeModifiers = builder.build();
     }
 
@@ -81,6 +58,10 @@ public class PolearmBaseItem extends SwordItem implements IInnateEnchantment {
     @Override
     public float getAttackDamage(){
         return this.attackDamage;
+    }
+
+    public double getAttackRange() {
+        return attackRange;
     }
 
     @Override
@@ -110,7 +91,7 @@ public class PolearmBaseItem extends SwordItem implements IInnateEnchantment {
 
     @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return CleanlinessHelper.canRepairCheck(repairIngredient, ingredient);
+        return BasesHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
     }
 
     @Override
@@ -126,12 +107,6 @@ public class PolearmBaseItem extends SwordItem implements IInnateEnchantment {
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         super.appendTooltip(stack, world, tooltip, tooltipContext);
-        int i = 1;
-        String str = stack.getItem().getTranslationKey().toLowerCase(Locale.ROOT).substring(17);
-        String translationKey = String.format("tooltip_info_item.mcdw_redux.%s_", str);
-        while (I18n.hasTranslation(translationKey + i)) {
-            tooltip.add(Text.translatable(translationKey + i).formatted(Formatting.ITALIC));
-            i++;
-        }
+        BasesHelper.mcdw_redux$appendTooltip(this.weaponsID, tooltip);
     }
 }

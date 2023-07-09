@@ -1,25 +1,31 @@
 package dev.timefall.mcdw_redux.items.bases;
 
+import dev.timefall.mcdw_redux.enums.WeaponsID;
+import dev.timefall.mcdw_redux.helpers.BasesHelper;
 import dev.timefall.mcdw_redux.registries.ItemGroupsRegistry;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShieldItem;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
+/**
+ * ShieldBaseItem is a replica of ShieldItem except that Minecraft is dumb and this is the only way to add shields.
+ */
+
 public class ShieldBaseItem extends ShieldItem {
+    WeaponsID weaponsID;
     public final ToolMaterial material;
     String[] repairIngredient;
 
-    @SuppressWarnings("UnstableApiUsage")
-    public ShieldBaseItem(ToolMaterial material, String[] repairIngredient) {
-        super(new Item.Settings()
-                .rarity(RarityHelper.fromToolMaterial(material))
-                .maxCount(1)
-                .maxDamage(250 + material.getDurability())
-                .arch$tab(ItemGroupsRegistry.MCDW_REDUX_SHIELDS)
-        );
+    public ShieldBaseItem(WeaponsID weaponsID, ToolMaterial material, String[] repairIngredient) {
+        super(BasesHelper.mcdw_redux$createMeleeWeaponSettings(material, ItemGroupsRegistry.MCDW_REDUX_SHIELDS.get()));
+
+        this.weaponsID = weaponsID;
         this.material = material;
         this.repairIngredient = repairIngredient;
     }
@@ -49,6 +55,6 @@ public class ShieldBaseItem extends ShieldItem {
 
     @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return CleanlinessHelper.canRepairCheck(repairIngredient, ingredient);
+        return BasesHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
     }
 }

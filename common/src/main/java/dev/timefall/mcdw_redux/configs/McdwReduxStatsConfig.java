@@ -13,5 +13,7 @@ public class McdwReduxStatsConfig implements ConfigData {
     @Comment("This value is ignored if Better Combat is installed! Default: 1.0")
     public final double extraAttackReachOfStaves = 1.0D;
     @Comment("This value is ignored if Better Combat is installed! Default: 1.0")
-    public final double extraAttackReachOfWhips = 1.0D;
+    public final double extraAttackReachOfWhips = 1.5D;
+
+
 }

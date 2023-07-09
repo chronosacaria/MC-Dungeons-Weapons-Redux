@@ -11,10 +11,18 @@ public class EntityAttributesRegistry {
     public static final DeferredRegister<EntityAttribute> ENTITY_ATTRIBUTE_DEFERRED_REGISTER =
             DeferredRegister.create(McdwRedux.MOD_ID, RegistryKeys.ATTRIBUTE);
 
-    public static final RegistrySupplier<EntityAttribute> REACH = ENTITY_ATTRIBUTE_DEFERRED_REGISTER.register(McdwRedux.ID("reach"),
-            () -> createAttribute("reach", 0.0, 0.0, 1024.0));
-    public static final RegistrySupplier<EntityAttribute> ATTACK_RANGE = ENTITY_ATTRIBUTE_DEFERRED_REGISTER.register(McdwRedux.ID("attack_range"),
-            () -> createAttribute("reach", 0.0, 0.0, 1024.0));
+    public static final RegistrySupplier<EntityAttribute> REACH = registerAttribute("reach");
+    public static final RegistrySupplier<EntityAttribute> ATTACK_RANGE = registerAttribute("attack_range");
+
+    private static RegistrySupplier<EntityAttribute> registerAttribute(String id) {
+        return registerAttribute(id, 0);
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static RegistrySupplier<EntityAttribute> registerAttribute(String id, double fallback) {
+        return ENTITY_ATTRIBUTE_DEFERRED_REGISTER.register(McdwRedux.ID(id),
+                () -> createAttribute(id, fallback, 0.0, 1024.0));
+    }
 
     @SuppressWarnings("SameParameterValue")
     private static EntityAttribute createAttribute(String name, double fallback, double min, double max) {

@@ -1,42 +1,40 @@
 package dev.timefall.mcdw_redux.items.bases;
 
 import dev.architectury.platform.Platform;
+import dev.timefall.mcdw_redux.enums.WeaponsID;
+import dev.timefall.mcdw_redux.helpers.BasesHelper;
 import dev.timefall.mcdw_redux.helpers.RangedAttackHelper;
 import dev.timefall.mcdw_redux.interfaces.IInnateEnchantment;
-import dev.timefall.mcdw_redux.registries.ItemGroupsRegistry;
-import dev.timefall.mcdw_redux.registries.ItemsRegistry;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.BowItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
+/**
+ * BowBaseItem is a replica of BowItem except that it also has the functionality bestowed by this mod.
+ * This functionality includes variable projectile damage, draw speed, range and allowing for innate enchantments.
+ * This allows for variance amongst Longbows, Shortbows and regular bows.
+ */
+
 public class BowBaseItem extends BowItem implements IInnateEnchantment {
+    WeaponsID weaponsID;
     public final ToolMaterial material;
     public final double projectileDamage;
     public final float drawSpeed;
     public float maxBowRange;
     String[] repairIngredient;
 
-    @SuppressWarnings("UnstableApiUsage")
-    public BowBaseItem(ToolMaterial material, double projectileDamage, float drawSpeed, float maxBowRange, String[] repairIngredient) {
-        super(
-                new Item.Settings()
-                        .maxCount(1)
-                        .maxDamage(100 + material.getDurability())
-                        .arch$tab(ItemGroupsRegistry.MCDW_REDUX_RANGED)
-        );
+    public BowBaseItem(WeaponsID weaponsID, ToolMaterial material, double projectileDamage, float drawSpeed, float maxBowRange, String[] repairIngredient) {
+        super(BasesHelper.mcdw_redux$createRangedWeaponSettings(material));
+        this.weaponsID = weaponsID;
         this.material = material;
         if (Platform.isModLoaded("projectile_damage")) {
             this.projectileDamage = projectileDamage;
@@ -88,7 +86,7 @@ public class BowBaseItem extends BowItem implements IInnateEnchantment {
 
     @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return CleanlinessHelper.canRepairCheck(repairIngredient, ingredient);
+        return BasesHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
     }
 
     @Override
@@ -104,14 +102,6 @@ public class BowBaseItem extends BowItem implements IInnateEnchantment {
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         super.appendTooltip(stack, world, tooltip, tooltipContext);
-        int i = 1;
-        String str = stack.getItem().getTranslationKey().toLowerCase(Locale.ROOT).substring(14);
-        String translationKey = String.format("tooltip_info_item.mcdw_redux.%s_", str);
-        while (I18n.hasTranslation(translationKey + i)) {
-            tooltip.add(Text.translatable(translationKey + i).formatted(Formatting.ITALIC));
-            i++;
-        }
-        if (stack.getItem() == ItemsRegistry.HUNTERS_PROMISE.get())
-            tooltip.add(Text.translatable("tooltip_ench_item.mcdw_redux.hunters_promise_1").formatted(Formatting.GRAY));
+        BasesHelper.mcdw_redux$appendTooltip(this.weaponsID, tooltip);
     }
 }

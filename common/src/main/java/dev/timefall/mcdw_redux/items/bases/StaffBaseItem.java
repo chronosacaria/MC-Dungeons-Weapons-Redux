@@ -2,71 +2,51 @@ package dev.timefall.mcdw_redux.items.bases;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
-import dev.architectury.platform.Platform;
 import dev.timefall.mcdw_redux.McdwRedux;
-import dev.timefall.mcdw_redux.configs.CompatibilityFlags;
+import dev.timefall.mcdw_redux.enums.WeaponsID;
+import dev.timefall.mcdw_redux.helpers.BasesHelper;
 import dev.timefall.mcdw_redux.interfaces.IInnateEnchantment;
-import dev.timefall.mcdw_redux.registries.EntityAttributesRegistry;
 import dev.timefall.mcdw_redux.registries.ItemGroupsRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.AxeItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
+/**
+ * StaffBaseItem is an extension of AxeItem in order to make use of the shield breaking functionality of the AxeItem
+ */
+
 public class StaffBaseItem extends AxeItem implements IInnateEnchantment {
+    WeaponsID weaponsID;
     private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
     private final ToolMaterial material;
     private final float attackDamage;
     String[] repairIngredient;
 
-    @SuppressWarnings("UnstableApiUsage")
-    public StaffBaseItem(ToolMaterial material, float attackDamage, float attackSpeed, String[] repairIngredient) {
-        super(
-                material,
-                attackDamage,
-                attackSpeed,
-                new Item.Settings()
-                        .rarity(RarityHelper.fromToolMaterial(material))
-                        .arch$tab(ItemGroupsRegistry.MCDW_REDUX_MELEE)
-        );
+    public StaffBaseItem(WeaponsID weaponsID, ToolMaterial material, float attackDamage, float attackSpeed, String[] repairIngredient) {
+        super(material, attackDamage, attackSpeed, BasesHelper.mcdw_redux$createMeleeWeaponSettings(material, ItemGroupsRegistry.MCDW_REDUX_MELEE.get()));
+        this.weaponsID = weaponsID;
         this.material = material;
         this.attackDamage = attackDamage;
         this.repairIngredient = repairIngredient;
 
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID,
-                "Tool modifier", this.attackDamage, EntityAttributeModifier.Operation.ADDITION));
-        builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID,
-                "Tool modifier", attackSpeed, EntityAttributeModifier.Operation.ADDITION));
-        if (Platform.isFabric() && Platform.isModLoaded("reach-entity-attributes") && CompatibilityFlags.isReachExtensionEnabled) {
-            builder.put(ReachEntityAttributes.REACH, new EntityAttributeModifier("Attack range",
-                    McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfStaves,
-                    EntityAttributeModifier.Operation.ADDITION));
-            builder.put(ReachEntityAttributes.ATTACK_RANGE, new EntityAttributeModifier("Attack range",
-                    McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfStaves,
-                    EntityAttributeModifier.Operation.ADDITION));
-        } else if (CompatibilityFlags.isReachExtensionEnabled) {
-            builder.put(EntityAttributesRegistry.ATTACK_RANGE.get(), new EntityAttributeModifier("Attack range",
-                    McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfStaves,
-                    EntityAttributeModifier.Operation.ADDITION));
-        }
+        BasesHelper.mcdw_redux$putRangeAttributes(builder, McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfStaves);
         this.attributeModifiers = builder.build();
     }
 
@@ -87,7 +67,7 @@ public class StaffBaseItem extends AxeItem implements IInnateEnchantment {
 
     @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return CleanlinessHelper.canRepairCheck(repairIngredient, ingredient);
+        return BasesHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
     }
 
     @Override
@@ -134,12 +114,6 @@ public class StaffBaseItem extends AxeItem implements IInnateEnchantment {
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         super.appendTooltip(stack, world, tooltip, tooltipContext);
-        int i = 1;
-        String str = stack.getItem().getTranslationKey().toLowerCase(Locale.ROOT).substring(16);
-        String translationKey = String.format("tooltip_info_item.mcdw_redux.%s_", str);
-        while (I18n.hasTranslation(translationKey + i)) {
-            tooltip.add(Text.translatable(translationKey + i).formatted(Formatting.ITALIC));
-            i++;
-        }
+        BasesHelper.mcdw_redux$appendTooltip(this.weaponsID, tooltip);
     }
 }
