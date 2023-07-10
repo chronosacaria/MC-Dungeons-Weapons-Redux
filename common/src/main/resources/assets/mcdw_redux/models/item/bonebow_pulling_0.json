@@ -1,0 +1,6 @@
+{
+    "parent": "item/bow",
+    "textures": {
+        "layer0": "mcdw_redux:item/bows/bonebow_pulling_0"
+    }
+}

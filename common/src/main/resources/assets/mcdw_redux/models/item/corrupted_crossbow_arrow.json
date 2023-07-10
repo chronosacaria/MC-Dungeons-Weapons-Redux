@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/corrupted_crossbow",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/corrupted_crossbow_arrow"
+  }
+}

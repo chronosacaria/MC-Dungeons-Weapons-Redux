@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/imploding_crossbow",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/imploding_crossbow_pulling_0"
+  }
+}

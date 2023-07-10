@@ -17,7 +17,11 @@
   "icon": "icon.png",
 
   "environment": "*",
-  "entrypoints": {},
+  "entrypoints": {
+    "main": [
+      "dev.timefall.mcdw_redux.fabric.McdwReduxFabric"
+    ]
+  },
   "mixins": [
     "mcdw_redux.mixins.json",
     "mcdw_redux-common.mixins.json"

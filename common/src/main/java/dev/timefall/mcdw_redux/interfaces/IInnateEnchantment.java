@@ -1,7 +1,5 @@
 package dev.timefall.mcdw_redux.interfaces;
 
-import dev.timefall.mcdw_redux.McdwRedux;
-import dev.timefall.mcdw_redux.enums.SettingsID;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.Item;
@@ -32,14 +30,14 @@ public interface IInnateEnchantment {
      */
     default @NotNull ItemStack getInnateEnchantedStack(Item item) {
         ItemStack itemStack = new ItemStack(item);
-        if (McdwRedux.CONFIG.mcdwReduxEnchantmentSettingsConfig.ENABLE_ENCHANTMENT_SETTINGS.get(SettingsID.ENABLE_INNATE_ENCHANTMENTS)) {
+        //if (McdwRedux.CONFIG.mcdwReduxEnchantmentSettingsConfig.ENABLE_ENCHANTMENT_SETTINGS.get(SettingsID.ENABLE_INNATE_ENCHANTMENTS)) {
             Map<Enchantment, Integer> map = getInnateEnchantments();
             if (map != null) {
-                if (McdwRedux.CONFIG.mcdwReduxEnchantmentSettingsConfig.ENABLE_ENCHANTMENT_SETTINGS.get(SettingsID.ENABLE_INNATE_ENCHANTMENTS))
+                //if (McdwRedux.CONFIG.mcdwReduxEnchantmentSettingsConfig.ENABLE_ENCHANTMENT_SETTINGS.get(SettingsID.ENABLE_INNATE_ENCHANTMENTS))
                     for (Enchantment enchantment : map.keySet())
                         itemStack.addEnchantment(enchantment, map.get(enchantment));
             }
-        }
+        //}
         return itemStack;
     }
 

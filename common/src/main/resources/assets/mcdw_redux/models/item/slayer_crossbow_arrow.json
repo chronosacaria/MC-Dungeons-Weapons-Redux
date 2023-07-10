@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/slayer_crossbow",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/slayer_crossbow_arrow"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/spellbound_crossbow",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/spellbound_crossbow_firework"
+  }
+}

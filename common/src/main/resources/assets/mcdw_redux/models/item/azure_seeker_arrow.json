@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/azure_seeker",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/azure_seeker_arrow"
+  }
+}

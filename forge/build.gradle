@@ -13,6 +13,29 @@ configurations {
     runtimeClasspath.extendsFrom common
     developmentForge.extendsFrom common
 }
+def generatedResources = file("forge/src/main/generated")
+
+sourceSets {
+    main {
+        resources.srcDir generatedResources
+    }
+}
+
+loom {
+    runs {
+        datagenForgeClient {
+            data()
+            programArgs "--all", "--mod", "mcdw_redux"
+            programArgs "--output", generatedResources.absolutePath
+        }
+    }
+}
+
+repositories {
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
+}
 
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
@@ -23,6 +46,8 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
     modApi("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}")
+    modApi("maven.modrinth:projectile-damage-attribute:${rootProject.projectile_damage_version}+${rootProject.minecraft_version}-forge")
+
 }
 
 processResources {

@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/doom_crossbow",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/doom_crossbow_firework"
+  }
+}

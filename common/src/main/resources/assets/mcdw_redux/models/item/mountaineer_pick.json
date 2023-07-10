@@ -1,0 +1,19 @@
+{
+	"parent": "mcdw_redux:item/model_pick",
+	"textures": {
+		"layer0": "mcdw_redux:item/picks/mountaineer_pick",
+		"particle": "mcdw_redux:item/picks/mountaineer_pick"
+	},
+	"gui_light": "front",
+	"display": {
+		"head": {
+			"rotation": [0, 0, 0],
+			"translation": [0, 2, 0],
+			"scale":[ 0.5, 0.5, 0.5 ]
+		},
+		"ground": {
+			"translation": [ 0, 2, 0 ],
+			"scale": [ 0.5, 0.5, 0.5 ]
+		}
+	}
+}

@@ -7,9 +7,7 @@ import dev.timefall.mcdw_redux.helpers.RangedAttackHelper;
 import dev.timefall.mcdw_redux.interfaces.IInnateEnchantment;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.*;
 import net.minecraft.text.Text;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
@@ -26,7 +24,6 @@ import java.util.function.Predicate;
 
 public class BowBaseItem extends BowItem implements IInnateEnchantment {
     WeaponsID weaponsID;
-    public final ToolMaterial material;
     public final double projectileDamage;
     public final float drawSpeed;
     public float maxBowRange;
@@ -35,7 +32,6 @@ public class BowBaseItem extends BowItem implements IInnateEnchantment {
     public BowBaseItem(WeaponsID weaponsID, ToolMaterial material, double projectileDamage, float drawSpeed, float maxBowRange, String[] repairIngredient) {
         super(BasesHelper.mcdw_redux$createRangedWeaponSettings(material));
         this.weaponsID = weaponsID;
-        this.material = material;
         if (Platform.isModLoaded("projectile_damage")) {
             this.projectileDamage = projectileDamage;
         } else {
@@ -80,11 +76,6 @@ public class BowBaseItem extends BowItem implements IInnateEnchantment {
     }
 
     @Override
-    public int getEnchantability() {
-        return material.getEnchantability();
-    }
-
-    @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
         return BasesHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
     }
@@ -92,6 +83,14 @@ public class BowBaseItem extends BowItem implements IInnateEnchantment {
     @Override
     public ItemStack getDefaultStack() {
         return getInnateEnchantedStack(this);
+    }
+
+    public double getProjectileDamage() {
+        if (Platform.isModLoaded("projectile_damage")) {
+            return projectileDamage;
+        } else {
+            return 0;
+        }
     }
 
     @Override

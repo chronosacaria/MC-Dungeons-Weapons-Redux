@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/voidcaller_crossbow",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/voidcaller_crossbow_firework"
+  }
+}

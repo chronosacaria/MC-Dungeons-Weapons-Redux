@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/feral_soul_crossbow",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/feral_soul_crossbow_pulling_1"
+  }
+}

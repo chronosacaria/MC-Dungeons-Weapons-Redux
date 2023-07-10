@@ -1,6 +1,8 @@
 package dev.timefall.mcdw_redux.helpers;
 
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import dev.architectury.platform.Platform;
 import dev.timefall.mcdw_redux.McdwRedux;
@@ -12,11 +14,16 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.*;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +44,7 @@ public class BasesHelper {
                         .arch$tab(ItemGroupsRegistry.MCDW_REDUX_RANGED);
     }
 
-    private static Rarity mcdw_redux$fromToolMaterial(ToolMaterial material){
+    public static Rarity mcdw_redux$fromToolMaterial(ToolMaterial material){
         return
                 material == ToolMaterials.NETHERITE ? Rarity.EPIC :
                 material == ToolMaterials.DIAMOND ? Rarity.RARE :
@@ -45,8 +52,7 @@ public class BasesHelper {
                         ? Rarity.UNCOMMON : Rarity.COMMON;
     }
 
-    public static void mcdw_redux$putRangeAttributes(
-            ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder, double extraReach) {
+    public static void mcdw_redux$putRangeAttributes(ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder, double extraReach) {
         if (Platform.isFabric() && Platform.isModLoaded("reach-entity-attributes") && CompatibilityFlags.isReachExtensionEnabled) {
             builder.put(ReachEntityAttributes.REACH, new EntityAttributeModifier("reach",
                     extraReach, EntityAttributeModifier.Operation.ADDITION));
@@ -58,18 +64,31 @@ public class BasesHelper {
         }
     }
 
-    public static boolean mcdw_redux$canRepairCheck(String[] repairIngredient, ItemStack ingredient) {
-        boolean isWood = false;
-        boolean isStone = false;
-        List<String> repairableList = Arrays.stream(repairIngredient).toList();
-        if (repairableList.contains("minecraft:planks"))
-            isWood = true;
-        if (repairableList.contains("minecraft:stone_crafting_materials"))
-            isStone = true;
+    public static boolean mcdw_redux$canRepairCheck(String[] repairIngredientString, ItemStack repairIngredientItemStack) {
+        List<String> repairItemsList = new ArrayList<>();
+        List<String> repairableList = Arrays.stream(repairIngredientString).toList();
+        boolean bl = false;
+        for (String repairIngredientIterator : repairableList) {
+            if (repairIngredientIterator.startsWith("#")) {
+                TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, new Identifier(repairIngredientIterator.substring(1)));
+                bl = bl || repairIngredientItemStack.isIn(tagKey);
+            } else {
+                repairItemsList.add(repairIngredientIterator);
+            }
+        }
+        Ingredient stringToIngredient = Ingredient.ofStacks(repairItemsList.stream().map((str)
+                -> new ItemStack(Registries.ITEM.get(Identifier.tryParse(str))))
+        );
+        return bl || stringToIngredient.test(repairIngredientItemStack);
+    }
 
-        return repairableList.contains(ingredient.getItem().toString())
-                || (isWood && ingredient.isIn(ItemTags.PLANKS)
-                || (isStone && ingredient.isIn(ItemTags.STONE_CRAFTING_MATERIALS)));
+    @SafeVarargs
+    public static Multimap<EntityAttribute, EntityAttributeModifier> unionMaps(Multimap<EntityAttribute, EntityAttributeModifier>... multimaps) {
+        LinkedListMultimap<EntityAttribute, EntityAttributeModifier> combinedMultiMap = LinkedListMultimap.create();
+        for (Multimap<EntityAttribute, EntityAttributeModifier> map : multimaps) {
+            combinedMultiMap.putAll(map);
+        }
+        return combinedMultiMap;
     }
 
     public static void mcdw_redux$appendTooltip(WeaponsID weaponsID, List<Text> tooltip) {
@@ -85,5 +104,16 @@ public class BasesHelper {
             tooltip.add(Text.translatable(translationKey + i).formatted(Formatting.GRAY));
             i++;
         }
+    }
+
+    public static ToolMaterial mcdw_redux$stringToMaterial(String material) {
+        return switch (material) {
+            case "wood" -> ToolMaterials.WOOD;
+            case "stone" -> ToolMaterials.STONE;
+            case "gold" -> ToolMaterials.GOLD;
+            case "diamond" -> ToolMaterials.DIAMOND;
+            case "netherite" -> ToolMaterials.NETHERITE;
+            default -> ToolMaterials.IRON;
+        };
     }
 }

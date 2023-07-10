@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/the_slicer",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/the_slicer_firework"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/soul_hunter_crossbow",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/soul_hunter_crossbow_pulling_2"
+  }
+}

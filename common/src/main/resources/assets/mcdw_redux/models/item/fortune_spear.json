@@ -1,0 +1,23 @@
+{
+	"parent": "mcdw_redux:item/model_spear",
+	"textures": {
+		"layer0": "mcdw_redux:item/spears/fortune_spear"
+	},
+	"gui_light": "front",
+	"display": {
+		"gui": {
+			"rotation": [0, 0, 0],
+			"translation": [1.0, 1.0, 0],
+			"scale": [1.25, 1.25, 1]
+		},
+		"head": {
+			"rotation": [ 0, 0, 180 ],
+			"translation": [ -1, 1, 0.5],
+			"scale":[ 1, 1, 0.5 ]
+		},
+		"ground": {
+			"translation": [ 0, 2, 0 ],
+			"scale": [ 0.75, 0.75, 0.5 ]
+		}
+	}
+}

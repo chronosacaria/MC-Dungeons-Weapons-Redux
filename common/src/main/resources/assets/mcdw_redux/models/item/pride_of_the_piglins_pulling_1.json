@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/pride_of_the_piglins",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/pride_of_the_piglins_pulling_1"
+  }
+}

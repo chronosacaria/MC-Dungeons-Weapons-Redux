@@ -2,7 +2,6 @@ package dev.timefall.mcdw_redux.items.bases;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import dev.timefall.mcdw_redux.McdwRedux;
 import dev.timefall.mcdw_redux.enums.WeaponsID;
 import dev.timefall.mcdw_redux.helpers.BasesHelper;
 import dev.timefall.mcdw_redux.interfaces.IInnateEnchantment;
@@ -15,10 +14,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.*;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
@@ -34,19 +30,17 @@ import java.util.Map;
 public class StaffBaseItem extends AxeItem implements IInnateEnchantment {
     WeaponsID weaponsID;
     private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
-    private final ToolMaterial material;
-    private final float attackDamage;
+    private final double attackRange;
     String[] repairIngredient;
 
-    public StaffBaseItem(WeaponsID weaponsID, ToolMaterial material, float attackDamage, float attackSpeed, String[] repairIngredient) {
+    public StaffBaseItem(WeaponsID weaponsID, ToolMaterial material, float attackDamage, float attackSpeed, double attackRange, String[] repairIngredient) {
         super(material, attackDamage, attackSpeed, BasesHelper.mcdw_redux$createMeleeWeaponSettings(material, ItemGroupsRegistry.MCDW_REDUX_MELEE.get()));
         this.weaponsID = weaponsID;
-        this.material = material;
-        this.attackDamage = attackDamage;
+        this.attackRange = attackRange;
         this.repairIngredient = repairIngredient;
 
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-        BasesHelper.mcdw_redux$putRangeAttributes(builder, McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfStaves);
+        BasesHelper.mcdw_redux$putRangeAttributes(builder, attackRange);
         this.attributeModifiers = builder.build();
     }
 
@@ -56,23 +50,8 @@ public class StaffBaseItem extends AxeItem implements IInnateEnchantment {
     }
 
     @Override
-    public ToolMaterial getMaterial() {
-        return this.material;
-    }
-
-    @Override
-    public int getEnchantability() {
-        return this.material.getEnchantability();
-    }
-
-    @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
         return BasesHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
-    }
-
-    @Override
-    public float getAttackDamage() {
-        return this.attackDamage;
     }
 
     @Override
@@ -96,8 +75,9 @@ public class StaffBaseItem extends AxeItem implements IInnateEnchantment {
     }
 
     @Override
-    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return equipmentSlot == EquipmentSlot.MAINHAND ? attributeModifiers :
+    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot equipmentSlot){
+        return equipmentSlot == EquipmentSlot.MAINHAND ?
+                BasesHelper.unionMaps(super.getAttributeModifiers(equipmentSlot), attributeModifiers) :
                 super.getAttributeModifiers(equipmentSlot);
     }
 

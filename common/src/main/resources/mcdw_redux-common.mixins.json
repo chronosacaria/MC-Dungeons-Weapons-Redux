@@ -4,7 +4,6 @@
   "package": "dev.timefall.mcdw_redux.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "accessors.InsulatedAxeItemAccessor"
   ],
   "client": [
   ],

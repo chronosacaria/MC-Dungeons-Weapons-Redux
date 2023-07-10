@@ -6,10 +6,7 @@ import dev.timefall.mcdw_redux.helpers.BasesHelper;
 import dev.timefall.mcdw_redux.interfaces.IInnateEnchantment;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.*;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
@@ -23,7 +20,6 @@ import java.util.Map;
 
 public class CrossbowBaseItem extends CrossbowItem implements IInnateEnchantment {
     WeaponsID weaponsID;
-    public final ToolMaterial material;
     public final double projectileDamage;
     public final int drawSpeed;
     public final float range;
@@ -32,7 +28,6 @@ public class CrossbowBaseItem extends CrossbowItem implements IInnateEnchantment
     public CrossbowBaseItem(WeaponsID weaponsID, ToolMaterial material, double projectileDamage, int drawSpeed, float range, String[] repairIngredient) {
         super(BasesHelper.mcdw_redux$createRangedWeaponSettings(material));
         this.weaponsID = weaponsID;
-        this.material = material;
         if (Platform.isModLoaded("projectile_damage")) {
             this.projectileDamage = projectileDamage;
         } else {
@@ -50,11 +45,6 @@ public class CrossbowBaseItem extends CrossbowItem implements IInnateEnchantment
     @Override
     public int getRange() {
         return (int) range;
-    }
-
-    @Override
-    public int getEnchantability() {
-        return material.getEnchantability();
     }
 
     @Override

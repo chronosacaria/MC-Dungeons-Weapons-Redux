@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/harp_crossbow",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/harp_crossbow_firework"
+  }
+}

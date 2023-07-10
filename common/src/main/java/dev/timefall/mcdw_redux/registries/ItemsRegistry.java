@@ -1,23 +1,26 @@
 package dev.timefall.mcdw_redux.registries;
 
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import dev.timefall.mcdw_redux.McdwRedux;
 import dev.timefall.mcdw_redux.enums.WeaponsID;
 import dev.timefall.mcdw_redux.items.BeeStingerItem;
 import dev.timefall.mcdw_redux.items.bases.*;
+import dev.timefall.mcdw_redux.items.stats.MeleeStats;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.RegistryKeys;
+import net.projectile_damage.api.IProjectileWeapon;
 
 @SuppressWarnings("unused")
 public class ItemsRegistry {
     public static final DeferredRegister<Item> ITEM_DEFERRED_REGISTER = DeferredRegister.create(McdwRedux.MOD_ID, RegistryKeys.ITEM);
     
     // Axes
-    public static final RegistrySupplier<AxeBaseItem> ANCHOR =                          mcdw_redux$registerAxe(WeaponsID.ANCHOR, ToolMaterials.IRON, 8, -3.4f, "minecraft:iron_ingot");
-    public static final RegistrySupplier<AxeBaseItem> AXE =                             mcdw_redux$registerAxe(WeaponsID.AXE, ToolMaterials.IRON, 6, -3.1f, "minecraft:iron_ingot");
+    public static final RegistrySupplier<AxeBaseItem> ANCHOR =                          mcdw_redux$registerAxe(WeaponsID.ANCHOR);
+    public static final RegistrySupplier<AxeBaseItem> AXE =                             mcdw_redux$registerAxe(WeaponsID.AXE);
     public static final RegistrySupplier<AxeBaseItem> ENCRUSTED_ANCHOR =                mcdw_redux$registerAxe(WeaponsID.ENCRUSTED_ANCHOR, ToolMaterials.DIAMOND, 8, -3.4f, "minecraft:diamond");
     public static final RegistrySupplier<AxeBaseItem> FIREBRAND =                       mcdw_redux$registerAxe(WeaponsID.FIREBRAND, ToolMaterials.DIAMOND, 4, -2.9f, "minecraft:diamond");
     public static final RegistrySupplier<AxeBaseItem> HIGHLAND_AXE =                    mcdw_redux$registerAxe(WeaponsID.HIGHLAND_AXE, ToolMaterials.IRON, 4, -2.9f, "minecraft:iron_ingot");
@@ -30,7 +33,7 @@ public class ItemsRegistry {
 
     // Bows
     public static final RegistrySupplier<BowBaseItem> ANCIENT_BOW =                     mcdw_redux$registerBow(WeaponsID.ANCIENT_BOW, ToolMaterials.NETHERITE, 7, 14, 18f, "minecraft:netherite_scrap");
-    public static final RegistrySupplier<BowBaseItem> BONE_BOW =                        mcdw_redux$registerBow(WeaponsID.BONE_BOW, ToolMaterials.STONE, 5, 16, 12f, "minecraft:bone");
+    public static final RegistrySupplier<BowBaseItem> BONE_BOW =                        mcdw_redux$registerBow(WeaponsID.BONEBOW, ToolMaterials.STONE, 5, 16, 12f, "minecraft:bone");
     public static final RegistrySupplier<BowBaseItem> BUBBLE_BOW =                      mcdw_redux$registerBow(WeaponsID.BUBBLE_BOW, ToolMaterials.IRON, 5, 15, 12f, "minecraft:iron_ingot");
     public static final RegistrySupplier<BowBaseItem> BUBBLE_BURSTER =                  mcdw_redux$registerBow(WeaponsID.BUBBLE_BURSTER, ToolMaterials.DIAMOND, 5, 15, 13f, "minecraft:diamond");
     public static final RegistrySupplier<BowBaseItem> BURST_GALE_BOW =                  mcdw_redux$registerBow(WeaponsID.BURST_GALE_BOW, ToolMaterials.DIAMOND, 6, 12, 16f, "minecraft:diamond");
@@ -100,7 +103,7 @@ public class ItemsRegistry {
     public static final RegistrySupplier<CrossbowBaseItem> SPELLBOUND_CROSSBOW =        mcdw_redux$registerCrossbow(WeaponsID.SPELLBOUND_CROSSBOW, ToolMaterials.IRON,      10, 28, 8.9f,  "minecraft:iron_ingot");
     public static final RegistrySupplier<CrossbowBaseItem> THE_SLICER =                 mcdw_redux$registerCrossbow(WeaponsID.THE_SLICER, ToolMaterials.IRON,      12, 28, 10.2f, "minecraft:iron_ingot");
     public static final RegistrySupplier<CrossbowBaseItem> VEILED_CROSSBOW =            mcdw_redux$registerCrossbow(WeaponsID.VEILED_CROSSBOW, ToolMaterials.DIAMOND,   16, 22, 14.5f, "minecraft:diamond");
-    public static final RegistrySupplier<CrossbowBaseItem> VOID_CALLER_CROSSBOW =       mcdw_redux$registerCrossbow(WeaponsID.VOID_CALLER_CROSSBOW, ToolMaterials.DIAMOND,   14, 26, 12.5f, "minecraft:diamond");
+    public static final RegistrySupplier<CrossbowBaseItem> VOID_CALLER_CROSSBOW =       mcdw_redux$registerCrossbow(WeaponsID.VOIDCALLER_CROSSBOW, ToolMaterials.DIAMOND,   14, 26, 12.5f, "minecraft:diamond");
     
     // Daggers
     public static final RegistrySupplier<DualBaseItem> BACKSTABBER =                    mcdw_redux$registerDual(WeaponsID.BACKSTABBER, ToolMaterials.DIAMOND,1, -1.7f, "minecraft:diamond");
@@ -122,10 +125,10 @@ public class ItemsRegistry {
     public static final RegistrySupplier<DualBaseItem> SOUL_FIST =                      mcdw_redux$registerDual(WeaponsID.SOUL_FIST, ToolMaterials.NETHERITE,0, -1.5f, "minecraft:netherite_scrap");
     
     // Glaives
-    public static final RegistrySupplier<RangedMeleeBaseItem> CACKLING_BROOM =          mcdw_redux$registerRangedMeleeItem(WeaponsID.CACKLING_BROOM, ToolMaterials.IRON,5, -3f, McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfPolearms, "minecraft:iron_ingot");
-    public static final RegistrySupplier<RangedMeleeBaseItem> GLAIVE =                  mcdw_redux$registerRangedMeleeItem(WeaponsID.GLAIVE, ToolMaterials.IRON,5, -3f, McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfPolearms, "minecraft:iron_ingot");
-    public static final RegistrySupplier<RangedMeleeBaseItem> GRAVE_BANE =              mcdw_redux$registerRangedMeleeItem(WeaponsID.GRAVE_BANE, ToolMaterials.IRON,6, -3f, McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfPolearms, "minecraft:iron_ingot");
-    public static final RegistrySupplier<RangedMeleeBaseItem> VENOM_GLAIVE =            mcdw_redux$registerRangedMeleeItem(WeaponsID.VENOM_GLAIVE, ToolMaterials.IRON,6, -3f, McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfPolearms, "minecraft:iron_ingot");
+    public static final RegistrySupplier<RangedMeleeBaseItem> CACKLING_BROOM =          mcdw_redux$registerRangedMeleeItem(WeaponsID.CACKLING_BROOM, ToolMaterials.IRON,5, -3f, 1, "minecraft:iron_ingot");
+    public static final RegistrySupplier<RangedMeleeBaseItem> GLAIVE =                  mcdw_redux$registerRangedMeleeItem(WeaponsID.GLAIVE, ToolMaterials.IRON,5, -3f, 1, "minecraft:iron_ingot");
+    public static final RegistrySupplier<RangedMeleeBaseItem> GRAVE_BANE =              mcdw_redux$registerRangedMeleeItem(WeaponsID.GRAVE_BANE, ToolMaterials.IRON,6, -3f, 1, "minecraft:iron_ingot");
+    public static final RegistrySupplier<RangedMeleeBaseItem> VENOM_GLAIVE =            mcdw_redux$registerRangedMeleeItem(WeaponsID.VENOM_GLAIVE, ToolMaterials.IRON,6, -3f, 1, "minecraft:iron_ingot");
     
     // Blunts
     public static final RegistrySupplier<BluntBaseItem> BONECLUB =                      mcdw_redux$registerBlunt(WeaponsID.BONECLUB, ToolMaterials.IRON,7, -3.2f, "minecraft:bone_block");
@@ -166,14 +169,14 @@ public class ItemsRegistry {
     public static final RegistrySupplier<RangedMeleeBaseItem> TRUTHSEEKER =             mcdw_redux$registerRangedMeleeItem(WeaponsID.TRUTHSEEKER, ToolMaterials.NETHERITE,3, -2.8f, 0, "minecraft:netherite_scrap");
     
     // Spears
-    public static final RegistrySupplier<RangedMeleeBaseItem> SPEAR =                   mcdw_redux$registerRangedMeleeItem(WeaponsID.SPEAR, ToolMaterials.IRON,4, -2.5f, McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfSpears, "minecraft:iron_ingot");
-    public static final RegistrySupplier<RangedMeleeBaseItem> WHISPERING_SPEAR =        mcdw_redux$registerRangedMeleeItem(WeaponsID.WHISPERING_SPEAR, ToolMaterials.IRON,5, -2.5f, McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfSpears, "minecraft:iron_ingot");
-    public static final RegistrySupplier<RangedMeleeBaseItem> FORTUNE_SPEAR =           mcdw_redux$registerRangedMeleeItem(WeaponsID.FORTUNE_SPEAR, ToolMaterials.IRON,5, -2.5f, McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfSpears,"minecraft:iron_ingot");
+    public static final RegistrySupplier<RangedMeleeBaseItem> SPEAR =                   mcdw_redux$registerRangedMeleeItem(WeaponsID.SPEAR, ToolMaterials.IRON,4, -2.5f, 1, "minecraft:iron_ingot");
+    public static final RegistrySupplier<RangedMeleeBaseItem> WHISPERING_SPEAR =        mcdw_redux$registerRangedMeleeItem(WeaponsID.WHISPERING_SPEAR, ToolMaterials.IRON,5, -2.5f, 1, "minecraft:iron_ingot");
+    public static final RegistrySupplier<RangedMeleeBaseItem> FORTUNE_SPEAR =           mcdw_redux$registerRangedMeleeItem(WeaponsID.FORTUNE_SPEAR, ToolMaterials.IRON,5, -2.5f, 1,"minecraft:iron_ingot");
     
     // Staves
-    public static final RegistrySupplier<StaffBaseItem> BATTLESTAFF =                   mcdw_redux$registerStaff(WeaponsID.BATTLESTAFF, ToolMaterials.WOOD, 2, -2.6f, "minecraft:planks");
-    public static final RegistrySupplier<StaffBaseItem> BATTLESTAFF_OF_TERROR =         mcdw_redux$registerStaff(WeaponsID.BATTLESTAFF_OF_TERROR, ToolMaterials.IRON, 5, -2.6f, "minecraft:iron_ingot");
-    public static final RegistrySupplier<StaffBaseItem> GROWING_STAFF =                 mcdw_redux$registerStaff(WeaponsID.GROWING_STAFF, ToolMaterials.IRON, 5, -2.6f, "minecraft:iron_ingot");
+    public static final RegistrySupplier<StaffBaseItem> BATTLESTAFF =                   mcdw_redux$registerStaff(WeaponsID.BATTLESTAFF, ToolMaterials.WOOD, 2, -2.6f, 1, "minecraft:planks");
+    public static final RegistrySupplier<StaffBaseItem> BATTLESTAFF_OF_TERROR =         mcdw_redux$registerStaff(WeaponsID.BATTLESTAFF_OF_TERROR, ToolMaterials.IRON, 5, -2.6f, 1, "minecraft:iron_ingot");
+    public static final RegistrySupplier<StaffBaseItem> GROWING_STAFF =                 mcdw_redux$registerStaff(WeaponsID.GROWING_STAFF, ToolMaterials.IRON, 5, -2.6f, 1, "minecraft:iron_ingot");
     
     // Swords
     public static final RegistrySupplier<RangedMeleeBaseItem> BEESTINGER =              mcdw_redux$registerRangedMeleeItem(WeaponsID.BEESTINGER, ToolMaterials.IRON, 0, -1.1f, 0,"minecraft:iron_ingot");
@@ -201,8 +204,8 @@ public class ItemsRegistry {
     public static final RegistrySupplier<RangedMeleeBaseItem> THE_STARLESS_NIGHT =      mcdw_redux$registerRangedMeleeItem(WeaponsID.THE_STARLESS_NIGHT, ToolMaterials.NETHERITE, 6, -3.3f, 0.5, "minecraft:netherite_scrap");
     
     // Whips
-    public static final RegistrySupplier<RangedMeleeBaseItem> VINE_WHIP =               mcdw_redux$registerRangedMeleeItem(WeaponsID.VINE_WHIP, ToolMaterials.IRON, 5, -3.1f, McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfWhips, "minecraft:vine");
-    public static final RegistrySupplier<RangedMeleeBaseItem> WHIP =                    mcdw_redux$registerRangedMeleeItem(WeaponsID.WHIP, ToolMaterials.IRON, 3, -3.1f, McdwRedux.CONFIG.mcdwReduxStatsConfig.extraAttackReachOfWhips, "minecraft:string");
+    public static final RegistrySupplier<RangedMeleeBaseItem> VINE_WHIP =               mcdw_redux$registerRangedMeleeItem(WeaponsID.VINE_WHIP, ToolMaterials.IRON, 5, -3.1f, 1.5, "minecraft:vine");
+    public static final RegistrySupplier<RangedMeleeBaseItem> WHIP =                    mcdw_redux$registerRangedMeleeItem(WeaponsID.WHIP, ToolMaterials.IRON, 3, -3.1f, 1.5, "minecraft:string");
 
     // Bee Stinger
     @SuppressWarnings("UnstableApiUsage")
@@ -211,6 +214,13 @@ public class ItemsRegistry {
                     .maxCount(64)
                     .arch$tab(ItemGroups.NATURAL)
             ));
+
+    private static RegistrySupplier<AxeBaseItem> mcdw_redux$registerAxe(WeaponsID wepEnum) {
+        MeleeStats stats = McdwRedux.CONFIG.mcdwReduxStatsConfig.AXE_BASE_STATS.get(wepEnum);
+        //TrueMeleeStats stats = new TrueMeleeStats(ToolMaterials.IRON, 8, -3.4f, "minecraft:iron_ingot");
+        return ITEM_DEFERRED_REGISTER.register(wepEnum.getId(), () ->
+                new AxeBaseItem(wepEnum, stats.getToolMaterial(), stats.getAttackDamage(), stats.getAttackSpeed(), stats.getRepairIngredients()));
+    }
 
     private static RegistrySupplier<AxeBaseItem> mcdw_redux$registerAxe(WeaponsID wepEnum, ToolMaterials toolMaterial, int attackDamage,
                                                                         float attackSpeed, String... repairIngredients) {
@@ -226,14 +236,22 @@ public class ItemsRegistry {
 
     private static RegistrySupplier<BowBaseItem> mcdw_redux$registerBow(WeaponsID wepEnum, ToolMaterials toolMaterial, int projectileDamage,
                                                                         int drawSpeed, float range, String... repairIngredients) {
-        return ITEM_DEFERRED_REGISTER.register(wepEnum.getId(), () ->
-                new BowBaseItem(wepEnum, toolMaterial, projectileDamage, drawSpeed, range, repairIngredients));
+        BowBaseItem bowBaseItem = new BowBaseItem(wepEnum, toolMaterial, projectileDamage, drawSpeed, range, repairIngredients);
+        if (Platform.isModLoaded("projectile_damage")) {
+            ((IProjectileWeapon)bowBaseItem).setProjectileDamage(projectileDamage);
+            ((IProjectileWeapon)bowBaseItem).setCustomLaunchVelocity((range / 15.0f) * 3.0);
+        }
+        return ITEM_DEFERRED_REGISTER.register(wepEnum.getId(), () -> bowBaseItem);
     }
 
     private static RegistrySupplier<CrossbowBaseItem> mcdw_redux$registerCrossbow(WeaponsID wepEnum, ToolMaterials toolMaterial, int projectileDamage,
                                                                                   int drawSpeed, float range, String... repairIngredients) {
-        return ITEM_DEFERRED_REGISTER.register(wepEnum.getId(), () ->
-                new CrossbowBaseItem(wepEnum, toolMaterial, projectileDamage, drawSpeed, range, repairIngredients));
+        CrossbowBaseItem crossbowBaseItem = new CrossbowBaseItem(wepEnum, toolMaterial, projectileDamage, drawSpeed, range, repairIngredients);
+        if (Platform.isModLoaded("projectile_damage")) {
+            ((IProjectileWeapon)crossbowBaseItem).setProjectileDamage(projectileDamage);
+            ((IProjectileWeapon)crossbowBaseItem).setCustomLaunchVelocity((range / 8.0f) * 3.15);
+        }
+        return ITEM_DEFERRED_REGISTER.register(wepEnum.getId(), () -> crossbowBaseItem);
     }
 
     private static RegistrySupplier<DualBaseItem> mcdw_redux$registerDual(WeaponsID wepEnum, ToolMaterials toolMaterial, int attackDamage,
@@ -254,9 +272,9 @@ public class ItemsRegistry {
     }
 
     private static RegistrySupplier<StaffBaseItem> mcdw_redux$registerStaff(WeaponsID wepEnum, ToolMaterials toolMaterial, int attackDamage,
-                                                                            float attackSpeed, String... repairIngredients) {
+                                                                            float attackSpeed, double attackRange, String... repairIngredients) {
         return ITEM_DEFERRED_REGISTER.register(wepEnum.getId(), () ->
-                new StaffBaseItem(wepEnum, toolMaterial, attackDamage, attackSpeed, repairIngredients));
+                new StaffBaseItem(wepEnum, toolMaterial, attackDamage, attackSpeed, attackRange, repairIngredients));
     }
 
     private static RegistrySupplier<RangedMeleeBaseItem> mcdw_redux$registerRangedMeleeItem(WeaponsID wepEnum, ToolMaterials toolMaterial, int attackDamage,

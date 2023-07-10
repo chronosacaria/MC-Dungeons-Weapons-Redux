@@ -61,6 +61,13 @@ Add the weapons (and some tools) from Minecraft Dungeons to Minecraft Java
    modId="minecraft"
    mandatory=true
    # This version range declares a minimum of the current minecraft version up to but not including the next major version
-   versionRange="[1.20.1,1.21)"
+   versionRange="[1.20.0,1.21)"
    ordering="NONE"
    side="BOTH"
+[[dependencies.mcdw_redux]]
+modId="architectury"
+mandatory=true
+versionRange="[9.0.8,)"
+ordering="AFTER"
+side="BOTH"
+

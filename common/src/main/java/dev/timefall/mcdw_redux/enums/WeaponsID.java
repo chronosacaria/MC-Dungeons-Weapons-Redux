@@ -22,8 +22,8 @@ public enum WeaponsID {
     SUNS_GRACE("suns_grace"),
 
     // Bow
-    ANCIENT_BOW("anciet_bow"),
-    BONE_BOW("bone_bow"),
+    ANCIENT_BOW("ancient_bow"),
+    BONEBOW("bonebow"),
     BUBBLE_BOW("bubble_bow"),
     BUBBLE_BURSTER("bubble_burster"),
     BURST_GALE_BOW("burst_gale_bow"),
@@ -88,8 +88,8 @@ public enum WeaponsID {
     SOUL_HUNTER_CROSSBOW("soul_hunter_crossbow"),
     SPELLBOUND_CROSSBOW("spellbound_crossbow"),
     THE_SLICER("the_slicer"),
-    VEILED_CROSSBOW("veild_crossbow"),
-    VOID_CALLER_CROSSBOW("void_caller_crossbow"),
+    VEILED_CROSSBOW("veiled_crossbow"),
+    VOIDCALLER_CROSSBOW("voidcaller_crossbow"),
 
     // Dual
     BACKSTABBER("backstabber"),
@@ -160,7 +160,7 @@ public enum WeaponsID {
     DIAMOND_SWORD("diamond_sword"),
     FREEZING_FOIL("freezing_foil"),
     FROST_SLAYER("frost_slayer"),
-    GREAT_AXEBLADE("great_axeblae"),
+    GREAT_AXEBLADE("great_axeblade"),
     HAWKBRAND("hawkbrand"),
     HEARTSTEALER("heartstealer"),
     IRON_SWORD("iron_sword"),

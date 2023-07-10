@@ -1,0 +1,6 @@
+{
+  "parent": "mcdw_redux:item/firebolt_thrower",
+  "textures": {
+    "layer0": "mcdw_redux:item/crossbows/firebolt_thrower_pulling_2"
+  }
+}

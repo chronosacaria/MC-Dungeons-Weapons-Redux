@@ -1,0 +1,128 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "mcdw_redux:item/model_hammer",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "mcdw_redux:item/hammers/bone_cudgel",
+		"particle": "mcdw_redux:item/hammers/bone_cudgel"
+	},
+	"elements": [
+		{
+			"from": [4, 1.5, 6],
+			"to": [12, 29.5, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [3, 2, 5, 9], "texture": "#0"},
+				"east": {"uv": [2, 2, 3, 9], "texture": "#0"},
+				"south": {"uv": [0, 2, 2, 9], "texture": "#0"},
+				"west": {"uv": [5, 2, 6, 9], "texture": "#0"},
+				"up": {"uv": [3, 2, 2, 0], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [4, 0, 3, 2], "rotation": 270, "texture": "#0"}
+			}
+		},
+		{
+			"from": [1, 22.5, 7],
+			"to": [15, 25.5, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [6.5, 9, 10, 9.75], "texture": "#0"},
+				"east": {"uv": [6, 9, 6.5, 9.75], "texture": "#0"},
+				"south": {"uv": [2.5, 9, 6, 9.75], "texture": "#0"},
+				"west": {"uv": [10, 9, 10.5, 9.75], "texture": "#0"},
+				"up": {"uv": [6.5, 9, 6, 5.5], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [7, 5.5, 6.5, 9], "rotation": 270, "texture": "#0"}
+			}
+		},
+		{
+			"from": [7, -4.5, 7],
+			"to": [9, 1.5, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [1, 0.5, 1.5, 2], "texture": "#0"},
+				"east": {"uv": [0.5, 0.5, 1, 2], "texture": "#0"},
+				"south": {"uv": [0, 0.5, 0.5, 2], "texture": "#0"},
+				"west": {"uv": [1.5, 0.5, 2, 2], "texture": "#0"},
+				"up": {"uv": [1, 0.5, 0.5, 0], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [1.5, 0, 1, 0.5], "rotation": 270, "texture": "#0"}
+			}
+		},
+		{
+			"from": [6, -7.5, 6],
+			"to": [10, -4.5, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [6, 1, 7, 1.75], "texture": "#0"},
+				"east": {"uv": [5, 1, 6, 1.75], "texture": "#0"},
+				"south": {"uv": [4, 1, 5, 1.75], "texture": "#0"},
+				"west": {"uv": [7, 1, 8, 1.75], "texture": "#0"},
+				"up": {"uv": [6, 1, 5, 0], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [7, 0, 6, 1], "rotation": 270, "texture": "#0"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, 90, 0],
+			"translation": [0.25, 7.5, 2.25]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, 90, 0],
+			"translation": [0.25, 7.5, 2.25]
+		},
+		"firstperson_righthand": {
+			"rotation": [20, 90, 0],
+			"translation": [9.5, 0.5, -7.25]
+		},
+		"firstperson_lefthand": {
+			"rotation": [20, 90, 0],
+			"translation": [9.5, 0.5, -7.25]
+		},
+		"ground": {
+			"translation": [ 0, 2, 0 ],
+			"scale": [ 0.4, 0.4, 0.5 ]
+		},
+		"gui": {
+			"rotation": [0, 0, -45],
+			"translation": [-1.5, -1.5, -1.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"head": {
+			"rotation": [0, 0, -45],
+			"translation": [0, 3.25, 0.5],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"fixed": {
+			"rotation": [0, 0, 45],
+			"translation": [1.5, -1.5, -1.5],
+			"scale": [0.6, 0.6, 0.6]
+		}
+	},
+	"groups": [
+		{
+			"name": "bone_cudgel",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "blade",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [0]
+				},
+				{
+					"name": "protrusions",
+					"origin": [9, 15, 16],
+					"color": 0,
+					"children": [1]
+				},
+				{
+					"name": "handle",
+					"origin": [9, 15, 16],
+					"color": 0,
+					"children": [2, 3]
+				}
+			]
+		}
+	]
+}
