@@ -1,16 +1,23 @@
 package dev.timefall.mcdw_redux.items.bases;
 
 import dev.architectury.platform.Platform;
+import dev.timefall.mcdw_redux.McdwRedux;
 import dev.timefall.mcdw_redux.enums.WeaponsID;
-import dev.timefall.mcdw_redux.helpers.BasesHelper;
 import dev.timefall.mcdw_redux.helpers.RangedAttackHelper;
+import dev.timefall.mcdw_redux.helpers.RegistrationHelper;
 import dev.timefall.mcdw_redux.interfaces.IInnateEnchantment;
+import dev.timefall.mcdw_redux.items.stats.RangedStats;
+import dev.timefall.mcdw_redux.registries.ItemGroupsRegistry;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.*;
+import net.minecraft.item.BowItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
+import net.projectile_damage.api.IProjectileWeapon;
 
 import java.util.List;
 import java.util.Map;
@@ -29,8 +36,11 @@ public class BowBaseItem extends BowItem implements IInnateEnchantment {
     public float maxBowRange;
     String[] repairIngredient;
 
+    @SuppressWarnings("UnstableApiUsage")
     public BowBaseItem(WeaponsID weaponsID, ToolMaterial material, double projectileDamage, float drawSpeed, float maxBowRange, String[] repairIngredient) {
-        super(BasesHelper.mcdw_redux$createRangedWeaponSettings(material));
+        super(new Item.Settings()
+                .rarity(RegistrationHelper.mcdw_redux$fromToolMaterial(material))
+                .arch$tab(ItemGroupsRegistry.MCDW_REDUX_RANGED));
         this.weaponsID = weaponsID;
         if (Platform.isModLoaded("projectile_damage")) {
             this.projectileDamage = projectileDamage;
@@ -46,7 +56,7 @@ public class BowBaseItem extends BowItem implements IInnateEnchantment {
     }
 
     public static float getBowArrowVelocity(ItemStack stack, int charge) {
-        float bowChargeTime = RangedAttackHelper.getVanillaBowChargeTime(stack);
+        float bowChargeTime = RangedAttackHelper.mcdw_redux$getVanillaBowChargeTime(stack);
         if (bowChargeTime <= 0){
             bowChargeTime = 1;
         }
@@ -77,12 +87,12 @@ public class BowBaseItem extends BowItem implements IInnateEnchantment {
 
     @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return BasesHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
+        return RegistrationHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
     }
 
     @Override
     public ItemStack getDefaultStack() {
-        return getInnateEnchantedStack(this);
+        return mcdw_redux$getInnateEnchantedStack(this);
     }
 
     public double getProjectileDamage() {
@@ -94,13 +104,24 @@ public class BowBaseItem extends BowItem implements IInnateEnchantment {
     }
 
     @Override
-    public Map<Enchantment, Integer> getInnateEnchantments() {
+    public Map<Enchantment, Integer> mcdw_redux$getInnateEnchantments() {
         return null;
     }
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         super.appendTooltip(stack, world, tooltip, tooltipContext);
-        BasesHelper.mcdw_redux$appendTooltip(this.weaponsID, tooltip);
+        RegistrationHelper.mcdw_redux$appendTooltip(this.weaponsID, tooltip);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static BowBaseItem makeBow(WeaponsID wepEnum) {
+        RangedStats stats = McdwRedux.CONFIG.mcdwReduxStatsConfig.BOW_BASE_STATS.get(wepEnum);
+        BowBaseItem bowBaseItem = new BowBaseItem(wepEnum, stats.mcdw_redux$getToolMaterial(), stats.getProjectileDamage(), stats.getDrawSpeed(), stats.getRange(), stats.getRepairIngredients());
+        if (Platform.isModLoaded("projectile_damage")) {
+            ((IProjectileWeapon)bowBaseItem).setProjectileDamage(stats.getProjectileDamage());
+            ((IProjectileWeapon)bowBaseItem).setCustomLaunchVelocity((stats.getRange() / 15.0f) * 3.0);
+        }
+        return bowBaseItem;
     }
 }

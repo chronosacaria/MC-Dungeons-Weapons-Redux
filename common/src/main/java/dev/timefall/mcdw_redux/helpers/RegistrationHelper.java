@@ -9,10 +9,10 @@ import dev.timefall.mcdw_redux.McdwRedux;
 import dev.timefall.mcdw_redux.configs.CompatibilityFlags;
 import dev.timefall.mcdw_redux.enums.WeaponsID;
 import dev.timefall.mcdw_redux.registries.EntityAttributesRegistry;
-import dev.timefall.mcdw_redux.registries.ItemGroupsRegistry;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.*;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
@@ -26,8 +26,9 @@ import net.minecraft.util.Rarity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
-public class BasesHelper {
+public class RegistrationHelper {
 
     @SuppressWarnings("UnstableApiUsage")
     public static Item.Settings mcdw_redux$createMeleeWeaponSettings(ToolMaterial material, ItemGroup itemGroup) {
@@ -37,11 +38,11 @@ public class BasesHelper {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    public static Item.Settings mcdw_redux$createRangedWeaponSettings(ToolMaterial material) {
+    public static Item.Settings mcdw_redux$createRangedWeaponSettings(ToolMaterial material, ItemGroup itemGroup) {
         return new Item.Settings()
                         .maxCount(1)
                         .maxDamage(100 + material.getDurability())
-                        .arch$tab(ItemGroupsRegistry.MCDW_REDUX_RANGED);
+                        .arch$tab(itemGroup);
     }
 
     public static Rarity mcdw_redux$fromToolMaterial(ToolMaterial material){
@@ -52,13 +53,22 @@ public class BasesHelper {
                         ? Rarity.UNCOMMON : Rarity.COMMON;
     }
 
-    public static void mcdw_redux$putRangeAttributes(ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder, double extraReach) {
+    public static void mcdw_redux$putRangeAttributes(ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder, double attackDamage, double attackSpeed, double extraReach) {
         if (Platform.isFabric() && Platform.isModLoaded("reach-entity-attributes") && CompatibilityFlags.isReachExtensionEnabled) {
+            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF"), "Weapon modifier",
+                    attackDamage, EntityAttributeModifier.Operation.ADDITION));
+            builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3"), "Weapon modifier",
+                    attackSpeed, EntityAttributeModifier.Operation.ADDITION));
+
             builder.put(ReachEntityAttributes.REACH, new EntityAttributeModifier("reach",
                     extraReach, EntityAttributeModifier.Operation.ADDITION));
             builder.put(ReachEntityAttributes.ATTACK_RANGE, new EntityAttributeModifier("attack_range",
                     extraReach, EntityAttributeModifier.Operation.ADDITION));
         } else if (CompatibilityFlags.isReachExtensionEnabled) {
+            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF"), "Weapon modifier",
+                    attackDamage, EntityAttributeModifier.Operation.ADDITION));
+            builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3"), "Weapon modifier",
+                    attackSpeed, EntityAttributeModifier.Operation.ADDITION));
             builder.put(EntityAttributesRegistry.ATTACK_RANGE.get(), new EntityAttributeModifier("attack_range",
                     extraReach, EntityAttributeModifier.Operation.ADDITION));
         }

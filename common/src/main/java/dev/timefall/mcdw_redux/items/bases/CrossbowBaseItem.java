@@ -1,14 +1,18 @@
 package dev.timefall.mcdw_redux.items.bases;
 
 import dev.architectury.platform.Platform;
+import dev.timefall.mcdw_redux.McdwRedux;
 import dev.timefall.mcdw_redux.enums.WeaponsID;
-import dev.timefall.mcdw_redux.helpers.BasesHelper;
+import dev.timefall.mcdw_redux.helpers.RegistrationHelper;
 import dev.timefall.mcdw_redux.interfaces.IInnateEnchantment;
+import dev.timefall.mcdw_redux.items.stats.RangedStats;
+import dev.timefall.mcdw_redux.registries.ItemGroupsRegistry;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.*;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
+import net.projectile_damage.api.IProjectileWeapon;
 
 import java.util.List;
 import java.util.Map;
@@ -25,8 +29,11 @@ public class CrossbowBaseItem extends CrossbowItem implements IInnateEnchantment
     public final float range;
     String[] repairIngredient;
 
+    @SuppressWarnings("UnstableApiUsage")
     public CrossbowBaseItem(WeaponsID weaponsID, ToolMaterial material, double projectileDamage, int drawSpeed, float range, String[] repairIngredient) {
-        super(BasesHelper.mcdw_redux$createRangedWeaponSettings(material));
+        super(new Item.Settings()
+                .rarity(RegistrationHelper.mcdw_redux$fromToolMaterial(material))
+                .arch$tab(ItemGroupsRegistry.MCDW_REDUX_RANGED));
         this.weaponsID = weaponsID;
         if (Platform.isModLoaded("projectile_damage")) {
             this.projectileDamage = projectileDamage;
@@ -49,7 +56,7 @@ public class CrossbowBaseItem extends CrossbowItem implements IInnateEnchantment
 
     @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return BasesHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
+        return RegistrationHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
     }
 
     @Override
@@ -63,17 +70,28 @@ public class CrossbowBaseItem extends CrossbowItem implements IInnateEnchantment
 
     @Override
     public ItemStack getDefaultStack() {
-        return getInnateEnchantedStack(this);
+        return mcdw_redux$getInnateEnchantedStack(this);
     }
 
     @Override
-    public Map<Enchantment, Integer> getInnateEnchantments() {
+    public Map<Enchantment, Integer> mcdw_redux$getInnateEnchantments() {
         return null;
     }
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         super.appendTooltip(stack, world, tooltip, tooltipContext);
-        BasesHelper.mcdw_redux$appendTooltip(this.weaponsID, tooltip);
+        RegistrationHelper.mcdw_redux$appendTooltip(this.weaponsID, tooltip);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static CrossbowBaseItem makeCrossbow(WeaponsID wepEnum) {
+        RangedStats stats = McdwRedux.CONFIG.mcdwReduxStatsConfig.CROSSBOW_BASE_STATS.get(wepEnum);
+        CrossbowBaseItem crossbowBaseItem = new CrossbowBaseItem(wepEnum, stats.mcdw_redux$getToolMaterial(), stats.getProjectileDamage(), stats.getDrawSpeed(), stats.getRange(), stats.getRepairIngredients());
+        if (Platform.isModLoaded("projectile_damage")) {
+            ((IProjectileWeapon)crossbowBaseItem).setProjectileDamage(stats.getProjectileDamage());
+            ((IProjectileWeapon)crossbowBaseItem).setCustomLaunchVelocity((stats.getRange() / 8.0f) * 3.15);
+        }
+        return crossbowBaseItem;
     }
 }

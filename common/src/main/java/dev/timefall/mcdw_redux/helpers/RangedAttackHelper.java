@@ -10,8 +10,8 @@ import net.minecraft.item.Items;
 import static net.minecraft.item.CrossbowItem.hasProjectile;
 
 public class RangedAttackHelper {
-    public static float getVanillaArrowVelocity(ItemStack stack, int charge){
-        float bowChargeTime = getVanillaBowChargeTime(stack);
+    public static float mcdw_redux$getVanillaArrowVelocity(ItemStack stack, int charge){
+        float bowChargeTime = mcdw_redux$getVanillaBowChargeTime(stack);
         if (bowChargeTime <= 0){
             bowChargeTime = 1;
         }
@@ -20,7 +20,7 @@ public class RangedAttackHelper {
         return Math.min(arrowVelocity, 1.0F);
     }
 
-    public static float getVanillaBowChargeTime(ItemStack stack){
+    public static float mcdw_redux$getVanillaBowChargeTime(ItemStack stack){
         int quickChargeLevel = EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack);
         //int accelerateLevel = EnchantmentHelper.getLevel(EnchantsRegistry.ACCELERATE, stack);
 
@@ -34,7 +34,7 @@ public class RangedAttackHelper {
         }
     }
 
-    public static float getVanillaOrModdedCrossbowArrowVelocity(ItemStack stack){
+    public static float mcdw_redux$getVanillaOrModdedCrossbowArrowVelocity(ItemStack stack){
         float arrowVelocity;
         if (stack.getItem() instanceof CrossbowBaseItem crossbowBaseItem){
             arrowVelocity = crossbowBaseItem.getProjectileVelocity(stack);
@@ -44,12 +44,12 @@ public class RangedAttackHelper {
         return arrowVelocity;
     }
 
-    public static float getVanillaOrModdedBowArrowVelocity(ItemStack stack, int charge){
+    public static float mcdw_redux$getVanillaOrModdedBowArrowVelocity(ItemStack stack, int charge){
         float arrowVelocity;
         if (stack.getItem() instanceof BowBaseItem){
             arrowVelocity = BowBaseItem.getBowArrowVelocity(stack, charge);
         } else {
-            arrowVelocity = getVanillaArrowVelocity(stack, charge);
+            arrowVelocity = mcdw_redux$getVanillaArrowVelocity(stack, charge);
         }
         return arrowVelocity;
     }

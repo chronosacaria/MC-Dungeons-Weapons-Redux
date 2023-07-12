@@ -11,7 +11,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 public interface IOffhandAttack {
-    default TypedActionResult<ItemStack> useOffhand(World world, PlayerEntity player, Hand hand) {
+    default TypedActionResult<ItemStack> mcdw_redux$useOffhand(World world, PlayerEntity player, Hand hand) {
         if (CompatibilityFlags.noOffhandConflicts) {
             if (hand == Hand.OFF_HAND
                     && world.isClient
@@ -21,7 +21,7 @@ public interface IOffhandAttack {
                     || (player.getMainHandStack().isOf(ItemsRegistry.THE_END.get()) && player.getOffHandStack().isOf(ItemsRegistry.THE_BEGINNING.get()))
                     || (player.getMainHandStack().isOf(ItemsRegistry.LAST_LAUGH_GOLD.get()) && player.getOffHandStack().isOf(ItemsRegistry.LAST_LAUGH_SILVER.get()))
                     || (player.getMainHandStack().isOf(ItemsRegistry.LAST_LAUGH_SILVER.get()) && player.getOffHandStack().isOf(ItemsRegistry.LAST_LAUGH_GOLD.get()))))) {
-                OffhandAttackChecker.checkForOffhandAttack();
+                OffhandAttackChecker.mcdw_redux$checkForOffhandAttack();
                 ItemStack offhand = player.getStackInHand(hand);
                 return new TypedActionResult<>(ActionResult.SUCCESS, offhand);
             }

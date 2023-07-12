@@ -1,13 +1,13 @@
 package dev.timefall.mcdw_redux.interfaces;
 
 public interface IDualWielding {
-    float getOffhandAttackCooldownProgressPerTick();
+    float mcdw_redux$getOffhandAttackCooldownProgressPerTick();
 
-    float getOffhandAttackCooldownProgress(float baseTime);
+    float mcdw_redux$getOffhandAttackCooldownProgress(float baseTime);
 
-    void resetLastAttackedOffhandTicks();
+    void mcdw_redux$resetLastAttackedOffhandTicks();
 
-    int getOffhandAttackedTicks();
+    int mcdw_redux$getOffhandAttackedTicks();
 
-    void setOffhandAttackedTicks(int lastAttackedOffhandTicks);
+    void mcdw_redux$setOffhandAttackedTicks(int lastAttackedOffhandTicks);
 }

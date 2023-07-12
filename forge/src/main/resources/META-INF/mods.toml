@@ -65,9 +65,9 @@ Add the weapons (and some tools) from Minecraft Dungeons to Minecraft Java
    ordering="NONE"
    side="BOTH"
 [[dependencies.mcdw_redux]]
-modId="architectury"
-mandatory=true
-versionRange="[9.0.8,)"
-ordering="AFTER"
-side="BOTH"
+   modId="architectury"
+   mandatory=true
+   versionRange="[9.0.8,)"
+   ordering="BEFORE"
+   side="BOTH"
 

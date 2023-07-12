@@ -18,17 +18,18 @@ public class OffhandAttackPacket {
     public static final Identifier OFFHAND_ATTACK_PACKET = new Identifier(McdwRedux.MOD_ID, "offhand_attack_entity");
     public static final Identifier OFFHAND_MISS_PACKET = new Identifier(McdwRedux.MOD_ID, "offhand_miss_entity");
 
-    public static Packet<ServerPlayPacketListener> offhandAttackPacket(Entity entity) {
+    public static Packet<ServerPlayPacketListener> mcdw_redux$offhandAttackPacket(Entity entity) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeInt(entity.getId());
         return new CustomPayloadC2SPacket(OFFHAND_ATTACK_PACKET, buf);
     }
 
-    public static Packet<?> offhandMissPacket() {
+    public static Packet<?> mcdw_redux$offhandMissPacket() {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         return new CustomPayloadC2SPacket(OFFHAND_MISS_PACKET, buf);
     }
 
+    @SuppressWarnings("deprecation")
     public static void registerPackets() {
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, OFFHAND_ATTACK_PACKET, (buf, context) -> {
             if (context.getPlayer().getServer() != null) {
@@ -46,7 +47,7 @@ public class OffhandAttackPacket {
         });
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, OFFHAND_MISS_PACKET, (buf, context) -> {
             if (context.getPlayer().getServer() != null)
-                context.getPlayer().getServer().execute(() -> ((IDualWielding) context.getPlayer()).resetLastAttackedOffhandTicks());
+                context.getPlayer().getServer().execute(() -> ((IDualWielding) context.getPlayer()).mcdw_redux$resetLastAttackedOffhandTicks());
         });
     }
 }

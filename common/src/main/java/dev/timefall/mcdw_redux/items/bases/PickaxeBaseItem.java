@@ -1,9 +1,10 @@
 package dev.timefall.mcdw_redux.items.bases;
 
 import dev.timefall.mcdw_redux.enums.WeaponsID;
-import dev.timefall.mcdw_redux.helpers.BasesHelper;
+import dev.timefall.mcdw_redux.helpers.RegistrationHelper;
 import dev.timefall.mcdw_redux.registries.ItemGroupsRegistry;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
@@ -21,20 +22,24 @@ public class PickaxeBaseItem extends PickaxeItem {
     WeaponsID weaponsID;
     String[] repairIngredient;
 
+    @SuppressWarnings("UnstableApiUsage")
+
     public PickaxeBaseItem(WeaponsID weaponsID, ToolMaterial material, int attackDamage, float attackSpeed, String[] repairIngredient) {
-        super(material, attackDamage, attackSpeed, BasesHelper.mcdw_redux$createMeleeWeaponSettings(material, ItemGroupsRegistry.MCDW_REDUX_MELEE.get()));
+        super(material, attackDamage, attackSpeed, new Item.Settings()
+                .rarity(RegistrationHelper.mcdw_redux$fromToolMaterial(material))
+                .arch$tab(ItemGroupsRegistry.MCDW_REDUX_MELEE));
         this.weaponsID = weaponsID;
         this.repairIngredient = repairIngredient;
     }
 
     @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return BasesHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
+        return RegistrationHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
     }
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         super.appendTooltip(stack, world, tooltip, tooltipContext);
-        BasesHelper.mcdw_redux$appendTooltip(this.weaponsID, tooltip);
+        RegistrationHelper.mcdw_redux$appendTooltip(this.weaponsID, tooltip);
     }
 }
