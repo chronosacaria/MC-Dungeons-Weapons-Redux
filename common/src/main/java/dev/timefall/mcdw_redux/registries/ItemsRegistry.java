@@ -7,7 +7,6 @@ import dev.timefall.mcdw_redux.enums.WeaponsID;
 import dev.timefall.mcdw_redux.items.BeeStingerItem;
 import dev.timefall.mcdw_redux.items.bases.*;
 import dev.timefall.mcdw_redux.items.stats.RangedMeleeStats;
-import dev.timefall.mcdw_redux.items.stats.RangedStats;
 import dev.timefall.mcdw_redux.items.stats.ShieldStats;
 import dev.timefall.mcdw_redux.items.stats.TrueMeleeStats;
 import net.minecraft.item.Item;
@@ -227,12 +226,10 @@ public class ItemsRegistry {
     }
 
     private static RegistrySupplier<BowBaseItem> mcdw_redux$registerBow(WeaponsID wepEnum) {
-        RangedStats stats = McdwRedux.CONFIG.mcdwReduxStatsConfig.BOW_BASE_STATS.get(wepEnum);
         return ITEM_DEFERRED_REGISTER.register(wepEnum.getId(), () -> BowBaseItem.makeBow(wepEnum));
     }
 
     private static RegistrySupplier<CrossbowBaseItem> mcdw_redux$registerCrossbow(WeaponsID wepEnum) {
-        RangedStats stats = McdwRedux.CONFIG.mcdwReduxStatsConfig.CROSSBOW_BASE_STATS.get(wepEnum);
         return ITEM_DEFERRED_REGISTER.register(wepEnum.getId(), () -> CrossbowBaseItem.makeCrossbow(wepEnum));
     }
 

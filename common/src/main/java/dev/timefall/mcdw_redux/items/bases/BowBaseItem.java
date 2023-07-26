@@ -15,13 +15,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import net.projectile_damage.api.IProjectileWeapon;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 /**
  * BowBaseItem is a replica of BowItem except that it also has the functionality bestowed by this mod.
@@ -42,14 +40,16 @@ public class BowBaseItem extends BowItem implements IInnateEnchantment {
                 .rarity(RegistrationHelper.mcdw_redux$fromToolMaterial(material))
                 .arch$tab(ItemGroupsRegistry.MCDW_REDUX_RANGED));
         this.weaponsID = weaponsID;
+        this.maxBowRange = maxBowRange;
         if (Platform.isModLoaded("projectile_damage")) {
             this.projectileDamage = projectileDamage;
+            ((IProjectileWeapon)this).setProjectileDamage(this.projectileDamage);
+            ((IProjectileWeapon)this).setCustomLaunchVelocity((this.maxBowRange / 15.0f) * 3.0);
         } else {
             this.projectileDamage = 0;
         }
         this.drawSpeed = drawSpeed;
         this.repairIngredient = repairIngredient;
-        this.maxBowRange = maxBowRange;
     }
     public float getDrawSpeed() {
         return Math.max(0, drawSpeed);
@@ -68,16 +68,6 @@ public class BowBaseItem extends BowItem implements IInnateEnchantment {
         }
 
         return arrowVelocity;
-    }
-
-    @Override
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.BOW;
-    }
-
-    @Override
-    public Predicate<ItemStack> getProjectiles() {
-        return BOW_PROJECTILES;
     }
 
     @Override
@@ -114,14 +104,9 @@ public class BowBaseItem extends BowItem implements IInnateEnchantment {
         RegistrationHelper.mcdw_redux$appendTooltip(this.weaponsID, tooltip);
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static BowBaseItem makeBow(WeaponsID wepEnum) {
         RangedStats stats = McdwRedux.CONFIG.mcdwReduxStatsConfig.BOW_BASE_STATS.get(wepEnum);
-        BowBaseItem bowBaseItem = new BowBaseItem(wepEnum, stats.mcdw_redux$getToolMaterial(), stats.getProjectileDamage(), stats.getDrawSpeed(), stats.getRange(), stats.getRepairIngredients());
-        if (Platform.isModLoaded("projectile_damage")) {
-            ((IProjectileWeapon)bowBaseItem).setProjectileDamage(stats.getProjectileDamage());
-            ((IProjectileWeapon)bowBaseItem).setCustomLaunchVelocity((stats.getRange() / 15.0f) * 3.0);
-        }
-        return bowBaseItem;
+        return new BowBaseItem(wepEnum, stats.mcdw_redux$getToolMaterial(), stats.getProjectileDamage(),
+                stats.getDrawSpeed(), stats.getRange(), stats.getRepairIngredients());
     }
 }

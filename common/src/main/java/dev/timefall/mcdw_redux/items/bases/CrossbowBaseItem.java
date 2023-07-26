@@ -35,13 +35,15 @@ public class CrossbowBaseItem extends CrossbowItem implements IInnateEnchantment
                 .rarity(RegistrationHelper.mcdw_redux$fromToolMaterial(material))
                 .arch$tab(ItemGroupsRegistry.MCDW_REDUX_RANGED));
         this.weaponsID = weaponsID;
+        this.range = range;
         if (Platform.isModLoaded("projectile_damage")) {
             this.projectileDamage = projectileDamage;
+            ((IProjectileWeapon)this).setProjectileDamage(this.projectileDamage);
+            ((IProjectileWeapon)this).setCustomLaunchVelocity((this.range / 8.0f) * 3.15);
         } else {
             this.projectileDamage = 0;
         }
         this.drawSpeed = drawSpeed;
-        this.range = range;
         this.repairIngredient = repairIngredient;
     }
 
@@ -57,11 +59,6 @@ public class CrossbowBaseItem extends CrossbowItem implements IInnateEnchantment
     @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
         return RegistrationHelper.mcdw_redux$canRepairCheck(repairIngredient, ingredient);
-    }
-
-    @Override
-    public boolean isUsedOnRelease(ItemStack stack) {
-        return stack.isOf(this);
     }
 
     public int getDrawSpeed() {
@@ -84,14 +81,9 @@ public class CrossbowBaseItem extends CrossbowItem implements IInnateEnchantment
         RegistrationHelper.mcdw_redux$appendTooltip(this.weaponsID, tooltip);
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static CrossbowBaseItem makeCrossbow(WeaponsID wepEnum) {
         RangedStats stats = McdwRedux.CONFIG.mcdwReduxStatsConfig.CROSSBOW_BASE_STATS.get(wepEnum);
-        CrossbowBaseItem crossbowBaseItem = new CrossbowBaseItem(wepEnum, stats.mcdw_redux$getToolMaterial(), stats.getProjectileDamage(), stats.getDrawSpeed(), stats.getRange(), stats.getRepairIngredients());
-        if (Platform.isModLoaded("projectile_damage")) {
-            ((IProjectileWeapon)crossbowBaseItem).setProjectileDamage(stats.getProjectileDamage());
-            ((IProjectileWeapon)crossbowBaseItem).setCustomLaunchVelocity((stats.getRange() / 8.0f) * 3.15);
-        }
-        return crossbowBaseItem;
+        return new CrossbowBaseItem(wepEnum, stats.mcdw_redux$getToolMaterial(), stats.getProjectileDamage(),
+                stats.getDrawSpeed(), stats.getRange(), stats.getRepairIngredients());
     }
 }
